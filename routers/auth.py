@@ -64,15 +64,17 @@ def authenticate_user(username: str, password: str, db: db_dependency):
 SECRET_KEY = "519944ac4c93fa81cc0992b8d8046dba6a3e31cb0b7f01a2b24d2fc09b21dd42"
 ALGORITHM = "HS256"
 
-def create_access_token(username: str, user_id: int, role: str, grade: int, expires_delta: timedelta): 
+def create_access_token(username: str, user_id: int, role: str, grade: int, is_approved: bool, expires_delta: timedelta): 
     """Creates a token for the logged-in user. The token will be used at the time of accessing a protected endpoint."""
 
     encode = {
         'sub': username,
         'id': user_id, 
         'role': role, 
-        'grade': grade
+        'grade': grade, 
+        'is_approved': is_approved
     }   
+
     expires = datetime.now(timezone.utc) + expires_delta
     encode.update({'exp': expires})
     return jwt.encode(encode, SECRET_KEY, algorithm = ALGORITHM)
@@ -95,7 +97,7 @@ async def get_current_user(token: str = Depends(oauth2_bearer)):
         if sub is None or id is None: 
             raise HTTPException(status_code = status.HTTP_401_UNAUTHORIZED, detail = "Could not validate user.")
         
-        if is_approved == False: 
+        if not is_approved: 
             raise HTTPException(status_code = status.HTTP_403_FORBIDDEN, detail = "User not approved by teacher yet.")
         
         return {'sub': sub, 'id': id, 'role': role, 'grade': grade, 'is_approved': is_approved}
@@ -114,14 +116,15 @@ async def login_for_access_token(db: db_dependency,
     if not user: 
         raise HTTPException(status_code = status.HTTP_401_UNAUTHORIZED, detail = "Could not validate user.")
 
-    if user.is_approved == False: 
+    if not user.is_approved: 
             raise HTTPException(status_code = status.HTTP_403_FORBIDDEN, detail = "User not approved by teacher yet.")
         
     token = create_access_token(username = user.username, 
                                 user_id = user.id, 
                                 role = user.role,
                                 grade = user.grade,
-                                expires_delta = timedelta(minutes = 120))
+                                expires_delta = timedelta(minutes = 120),
+                                is_approved = user.is_approved)
 
     return {'access_token': token, 'token_type': 'bearer'}
 
@@ -191,7 +194,7 @@ async def verify_token(token: str):
         if sub is None or id is None: 
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Could not validate user.")
         
-        if is_approved == False: 
+        if not is_approved: 
             raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="User not approved by teacher yet.")
         
         return {'sub': sub, 'id': id, 'role': role, 'grade': grade, 'is_approved': is_approved}

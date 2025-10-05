@@ -73,10 +73,10 @@
             <div class="row py-lg-5">
                 <div class="col-lg-6 col-md-8 mx-auto">
                     <h1 class="fw-light">
-                        {{ page_descriptions[0] }}
-                    </h1>
+                        {{ page_description_title }}
+                    </h1>   
                     <p class="lead">
-                        {{ page_descriptions[1] }}
+                        {{ page_description_text }}
                     </p>
                     <p>
                         {% if user and user.role == "teacher" %}

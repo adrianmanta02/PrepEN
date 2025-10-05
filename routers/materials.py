@@ -10,6 +10,7 @@ from models import Materials
 from typing import List
 from datetime import datetime, timezone
 from descriptions import page_descriptions
+from models import Users
 import uuid 
 
 # define the route within the page 
@@ -123,51 +124,85 @@ async def render_view_material(request: Request, db: db_dependency,
         return redirect_to_main_page() 
     
 @router.get("/{subject}/{part}")
-async def render_materials_page(request: Request, 
-                                subject: str, part: str, 
-                                db: db_dependency): 
+async def render_materials_page(
+    request: Request, 
+    subject: str, 
+    part: str, 
+    db: db_dependency
+): 
     try: 
-        currentToken =  request.cookies.get('access_token')
-        print(currentToken)
-        user = await get_current_user(token = currentToken)
-        print(user)
+        # get the token from cookie 
+        currentToken = request.cookies.get('access_token')
+        print("Current token:", currentToken)
+
+        # user din token
+        user = await get_current_user(token=currentToken)
+        print("User dict:", user)
 
         if user is None: 
             return redirect_to_login() 
+
+        # fallback for is_approved 
+        if not user.get('is_approved'):
+            print("User is not approved yet")
+            return redirect_to_login()
     
+        # path for loading the right materials 
         pathName = f"/materials/{subject}/{part}"
-        materials = await show_all_materials(db = db, 
-                                             pathGiven = pathName, 
-                                             user = user)
-        if materials: 
-            print(materials)
+        print("Path name:", pathName)
+
+        materials = await show_all_materials(db=db, pathGiven=pathName, user=user)
+        print("Materials found:", materials)
+
+        if materials:
             for material in materials: 
-                print(material.title)
-                print(material.description)
-                print(material.thumbnail)
+                print("Material:", material.id)
+                print("   title:", material.title)
+                print("   description:", material.description)
+                print("   thumbnail:", material.thumbnail)
+                print("   grade:", material.grade)
+                print("   owner_id:", material.owner_id)
+                print("   path:", material.path)
                 for file in material.files: 
-                    print(file)
-        
-                print(material.grade)
-                print(material.owner_id)
-                print(material.path)
+                    print("   file:", file)
 
-        # for each teaching material, get the specific thumbnail from the S3 Bucket 
+        # thumbnails with proper fallback from static/assets
         thumbnailUrls = [] 
-        for material in materials: 
-            url = get_presigned_url(filename = material.thumbnail)
+        for material in (materials or []):
+            if material.thumbnail:
+                try:
+                    url = get_presigned_url(filename=material.thumbnail)
+                except Exception as e:
+                    print(f"Error generating URL for {material.thumbnail}: {e}")
+                    url = "/static/default-thumb.png"
+            else:
+                print(f"Material {material.id} has no thumbnail, using default")
+                url = "/static/default-thumb.png"
             thumbnailUrls.append(url)
-        
 
-        return templates.TemplateResponse("materials-page.html", 
-                                          {'request': request, 'materials': materials, 
-                                           'subject': subject, 'part': part, 
-                                           'user': user, 'thumbnailUrls': thumbnailUrls, 
-                                           'page_descriptions': page_descriptions[part]})
-    
+        # description cu fallback: titlu + text
+        description_title, description_text = page_descriptions.get(
+            part, ["Titlu lipsă", "Descriere lipsă"]
+        )
+        print("Description used:", description_title, description_text)
+
+        return templates.TemplateResponse(
+            "materials-page.html",
+            {
+                'request': request,
+                'materials': materials,
+                'subject': subject,
+                'part': part,
+                'user': user,
+                'thumbnailUrls': thumbnailUrls,
+                'page_description_title': description_title,
+                'page_description_text': description_text
+            }
+        )
+
     except Exception as e:
-        print(f"Error: {e} awaweaweaw") 
-        return redirect_to_login() 
+        print(f"Error in render_materials_page: {e}")
+        return redirect_to_login()
     
 @router.get('/add-material')
 async def render_add_material_page(request: Request, 
