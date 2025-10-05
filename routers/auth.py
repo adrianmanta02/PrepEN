@@ -3,7 +3,7 @@ from database import SessionLocal
 from typing import Annotated, Optional
 from sqlalchemy.orm import Session
 from models import Users
-from passlib.context import CryptContext
+import bcrypt  
 from datetime import datetime, timedelta, timezone
 from jose import jwt, JWTError
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
@@ -13,11 +13,10 @@ from fastapi.templating import Jinja2Templates
 from fastapi.responses import RedirectResponse 
 
 router = APIRouter(
-    prefix = "/auth", #makes any endpoint start with /auth path
+    prefix = "/auth",
     tags = ["auth"]
 )
 
-# send the database to the server and close the connection after the request was made 
 def get_db(): 
     db = SessionLocal() 
     try: 
@@ -25,8 +24,8 @@ def get_db():
     finally: 
         db.close() 
 
-db_dependency = Annotated[Session, Depends(get_db)] # before creating the dependency between the session and the database, it first executes the code in get_db 
-bcrypt_context = CryptContext(schemes = ['bcrypt'], deprecated = "auto")
+db_dependency = Annotated[Session, Depends(get_db)]
+
 templates = Jinja2Templates(directory = "templates")
 
 # ------------------------ PAGES --------------------------------
@@ -42,6 +41,7 @@ async def render_register_page(request: Request):
     
     redirect_response = RedirectResponse(url = "/", status_code = status.HTTP_302_FOUND)
     return redirect_response
+
 # ------------------------ ENDPOINTS ------------------------------
 
 def authenticate_user(username: str, password: str, db: db_dependency):
@@ -50,15 +50,17 @@ def authenticate_user(username: str, password: str, db: db_dependency):
     """
     user = db.query(Users).filter(Users.username == username).first() 
     if not user: 
-        return False # user with the specified username was not found 
-
-    # check password for current user 
-    if not bcrypt_context.verify(password, user.password): 
-        return False # incorrect password
+        return False
     
-    return user 
+    # verify with bcrypt 
+    password_bytes = password.encode('utf-8')[:72]  # truncate to 72 bytes
+    hash_bytes = user.password.encode('utf-8')
+    
+    if not bcrypt.checkpw(password_bytes, hash_bytes): 
+        return False
+    
+    return user
 
-# set the parameters for the encryption 
 SECRET_KEY = "519944ac4c93fa81cc0992b8d8046dba6a3e31cb0b7f01a2b24d2fc09b21dd42"
 ALGORITHM = "HS256"
 
@@ -75,7 +77,8 @@ def create_access_token(username: str, user_id: int, role: str, grade: int, expi
     encode.update({'exp': expires})
     return jwt.encode(encode, SECRET_KEY, algorithm = ALGORITHM)
 
-oauth2_bearer = OAuth2PasswordBearer(tokenUrl = "auth/token") # if any protected endpoint requires a token, the username and the password should be sent at auth/token
+oauth2_bearer = OAuth2PasswordBearer(tokenUrl = "auth/token")
+
 async def get_current_user(token: str = Depends(oauth2_bearer)): 
     """Receives and decodes the JWT token via OAuth2PasswordBearer object. 
     If an endpoint is protected, the function is going to verify if the token was falsificated,
@@ -100,7 +103,6 @@ async def get_current_user(token: str = Depends(oauth2_bearer)):
     except JWTError: 
         raise HTTPException(status_code = status.HTTP_401_UNAUTHORIZED, detail = "Could not validate user.")
 
-# generate token within login 
 @router.post("/token")
 async def login_for_access_token(db: db_dependency, 
                                  form_data: Annotated[OAuth2PasswordRequestForm, Depends()]):
@@ -123,7 +125,6 @@ async def login_for_access_token(db: db_dependency,
 
     return {'access_token': token, 'token_type': 'bearer'}
 
-# define a class model request for adding a user 
 class CreateUserRequest(BaseModel): 
     firstname: str
     lastname: str
@@ -136,12 +137,16 @@ class CreateUserRequest(BaseModel):
 
 @router.post("/", status_code = status.HTTP_201_CREATED)
 async def create_user(db: db_dependency, create_user_request: CreateUserRequest): 
+    # Hash cu bcrypt
+    password_bytes = create_user_request.password.encode('utf-8')[:72]
+    hashed = bcrypt.hashpw(password_bytes, bcrypt.gensalt())
+    
     new_user = Users(
         firstname = create_user_request.firstname,
         lastname = create_user_request.lastname,
         username = create_user_request.username,
         email = create_user_request.email,
-        password = bcrypt_context.hash(create_user_request.password),
+        password = hashed.decode('utf-8'), 
         grade = create_user_request.grade,
         role = create_user_request.role,
         is_approved = create_user_request.is_approved
@@ -160,13 +165,11 @@ async def delete_user(db: db_dependency, userId: int = Path(gt = 0)):
     db.delete(user)
     db.commit() 
 
-# endpoint used to check the username on the login page 
 @router.get("/check-username", status_code = status.HTTP_200_OK)
 async def check_username(db: db_dependency, username: str):
     searched_user = db.query(Users).filter(Users.username == username).first()
     return {'available': searched_user is None}
 
-# endpoint used to check email on the login page 
 @router.get("/check-email", status_code = status.HTTP_200_OK)
 async def check_email(db: db_dependency, email: str): 
     searched_user = db.query(Users).filter(Users.email == email).first() 
