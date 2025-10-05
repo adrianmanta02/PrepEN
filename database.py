@@ -1,9 +1,13 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker 
 from sqlalchemy.ext.declarative import declarative_base
+from dotenv import load_dotenv
+import os 
+
+load_dotenv()
 
 # define database location 
-SQLALCHEMY_DATABASE_URL = f"postgresql://postgres:test1234@localhost/LearningApplicationDatabase"
+SQLALCHEMY_DATABASE_URL = os.getenv('DATABASE_URL')
 
 # create the application engine
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
