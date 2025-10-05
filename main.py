@@ -35,3 +35,7 @@ async def render_home_page(request: Request):
 app.include_router(auth.router)
 app.include_router(materials.router)
 app.include_router(users.router)
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)
