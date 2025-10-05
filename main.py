@@ -13,7 +13,7 @@ app = FastAPI(prefix = "/home")
 app.mount("/static", StaticFiles(directory = "static"), name = "static")
 
 # start the session 
-Base.metadata.create_all(bind = engine)
+# Base.metadata.create_all(bind = engine)
 
 templates = Jinja2Templates(directory = "templates")
 
