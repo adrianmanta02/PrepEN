@@ -1,0 +1,13 @@
+# hard coded descriptions for subject-2 page. 
+page_descriptions = {
+    'part-a': ['PARTEA A', """Partea A este primul pas spre succes! Aici găsești tot ce ai nevoie să înțelegi temele, să exersezi și să fii pregătit. Începe acum, fii curios și descoperă cât de ușor poate fi să înveți!"""], 
+    'part-b': ['PARTEA B', """Partea B te ajută să duci învățarea la nivelul următor! Aplică tot ce ai învățat, experimentează cu exerciții și descoperă cât de ușor devine să stăpânești materia cu fiecare pas."""], 
+    'rezumat': ['REZUMAT', """Transformă textele complexe în idei clare! Aici vei învăța cum să faci rezumate eficiente, să extragi esențialul și să fixezi informația rapid și inteligent."""],
+    'scrisoare': ['SCRISOARE', """Învață să scrii scrisori care transmit clar mesajul! Fie că e personală sau formală, aici vei descoperi cum să exprimi ideile elegant și convingător."""], 
+    'email': ['EMAIL', """Trimite email-uri care ies în evidență! Învață să compui mesaje clare, creative și profesioniste, astfel încât fiecare cuvânt să conteze. Fie că e pentru teme, proiecte sau comunicare cu profesorii, aici vei descoperi secretele unui email bine scris care atrage atenția și lasă o impresie pozitivă!"""], 
+    'jurnal': ["NOTĂ DE JURNAL", """Aici înveți cum să creezi note de jurnal eficiente și captivante. Descoperă tehnici simple pentru a-ți organiza gândurile, a exprima ideile clar și a-ți transforma experiențele în texte interesante."""], 
+    'narativ': ["TEXT NARATIV", """Descoperă arta de a spune povești care captivează! Găsește aici toate resursele necesare pentru a construi personaje memorabile, a da viață acțiunii și a transforma ideile tale în narațiuni care rămân în mintea cititorului."""], 
+    'descriptiv': ["TEXT DESCRIPTIV", """Explorează tainele descrierii! Aici găsești ghiduri, exemple și strategii pentru a transforma observațiile în texte vii, pline de culoare și detalii care prind viață pentru cititor."""], 
+    'argumentativ': ["TEXT ARGUMENTATIV", """Intră în universul argumentării și transformă-ți ideile în cuvinte care conving! Aici găsești tot ce ai nevoie pentru a construi texte pline de logică, exemple care îți susțin punctul de vedere și tehnici care fac fiecare argument să strălucească. Fii gata să îți aperi ideile cu stil și încredere!"""], 
+    'explicativ': ["TEXT EXPLICATIV", """În această pagină, fiecare idee prinde contur. Explorează cum conceptele se descompun în explicații clare, cu exemple și strategii care te ajută să înțelegi rapid și profund. Fă din învățare un proces vizual și logic, unde totul capătă sens și devine ușor de reținut!"""]
+}

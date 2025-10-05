@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+    {% block title %}{{ material.title }}{% endblock %}
+    {% block style %}
+        body {
+            background-color: #121212;
+            color: #fff;
+        }
+        .material-container {
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 2rem;
+            background-color: #1e1e1e;
+            border-radius: 0.75rem;
+        }
+        .file-list {
+            list-style: none;
+            padding: 0;
+        }
+        .file-item {
+            background-color: #2a2a2a;
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .file-item:hover {
+            background-color: #333;
+        }
+        .thumbnail-preview {
+            max-width: 100%;
+            height: auto;
+            border-radius: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+    {% endblock %}
+{% block content %}
+    <div class="material-container">
+        <a href="{{ material.path }}" class="btn btn-secondary mb-3">
+            ← Înapoi la listă
+        </a>
+
+        <h1 class="mb-3">{{ material.title }}</h1>
+
+        <div class="mb-4">
+            <span class="badge bg-primary">Clasa {{ material.grade }}</span>
+            <span class="badge bg-secondary">
+                Ultima modificare: 
+                {% if not material.updated_at %}
+                    {{ material.created_at.strftime('%d.%m.%Y - %H:%M:%S') }}
+                {% else %}
+                    {{ material.updated_at.strftime('%d.%m.%Y - %H:%M:%S') }}
+                {% endif %}
+            </span>
+        </div>
+
+        {% if material.thumbnail %}
+        <div class="mb-4">
+            <img src="/uploads/thumbnails/{{ material.thumbnail }}" 
+                 alt="Thumbnail" 
+                 class="thumbnail-preview"
+                 onerror="this.style.display='none'">
+        </div>
+        {% endif %}
+
+        <div class="mb-4">
+            <h5>Descriere:</h5>
+            <p class="lead">{{ material.description }}</p>
+        </div>
+
+        <div class="mb-4">
+            <h5>Fișiere disponibile:</h5>
+            {% if material.thumbnail %}
+                <li class="file-item">
+                    <span>📄 {{ material.thumbnail }}</span>
+                    <a href="{{ thumbnailUrl }}" 
+                       class="btn btn-sm btn-primary" 
+                       download>
+                        Descarcă
+                    </a>
+                </li>
+            {% endif %}
+
+            {% if material.files %}
+            <ul class="file-list">
+                {% for file in material.files %}
+                <li class="file-item">
+                    <span>📄 {{ file }}</span>
+                    <a href="{{ fileUrls[loop.index - 1] }}" 
+                       class="btn btn-sm btn-primary" 
+                       download>
+                        Descarcă
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+            {% elif not material.files and not material.thumbnail %}
+            <p class="text-muted">Nu sunt fișiere disponibile.</p>
+            {% endif %}
+        </div>
+
+        {% if user.role == "teacher" %}
+        <div class="mt-4">
+            <button class="btn btn-warning" id = "editButton" onclick='window.location.href = "/materials/add-material?materialId={{ material.id }}"'>
+                Modifică
+            </button>
+            <button class="btn btn-danger" id = "deleteButton">
+                Șterge
+            </button>
+        </div>
+        {% endif %}
+    </div>
+    <script>
+        sessionStorage.setItem('currentPath') = window.location.pathname; 
+        window.history.replaceState({}, document.title, "/"); // when trying to go from material view back to material edit, redirect to home page, so the user will not be sent again on the edit tab
+    </script>
+{% endblock %}

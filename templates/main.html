@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+{% block title %}Blog Example{% endblock %}
+{% block style %}
+      body {
+        background-color: #1c1c1e;
+        color: #f5f5f5;
+        font-family: 'Segoe UI', sans-serif;
+      }
+
+      .bg-body-secondary {
+        background-color: #2c2c2e !important;
+      }
+
+      h1.display-4 {
+        font-weight: 700;
+        color: #ff6b6b;
+      }
+
+      .lead {
+        font-size: 1.2rem;
+        line-height: 1.6;
+      }
+
+      .text-primary-emphasis {
+        color: #4dabf7 !important;
+        font-size: 1.2rem;
+      }
+
+      .text-success-emphasis {
+        color: #51cf66 !important;
+        font-size: 1.2rem;
+      }
+
+      .border.rounded {
+        border-radius: 15px !important;
+      }
+
+      .shadow-sm {
+        transition: transform 0.3s, box-shadow 0.3s;
+      }
+
+      .shadow-sm:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4) !important;
+      }
+
+      .card-text a {
+        color: #ff6b6b;
+        text-decoration: underline;
+        position: relative;
+        z-index: 2;
+      }
+
+      .card-text a:hover {
+        color: #f06595;
+      }
+
+      img {
+        border-radius: 10px;
+        object-fit: cover;
+      }
+
+      .cta-link {
+        font-weight: 600;
+        color: #ff6b6b;
+        text-decoration: none;
+        display: inline-block;
+        transition: color 0.2s;
+      }
+
+      .cta-link:hover {
+        color: #f06595;
+      }
+
+      @media (max-width: 992px) {
+        .col-auto img {
+          width: 100%;
+          height: auto;
+        }
+      }
+{% endblock %}
+{% block content %}
+    <main class="container my-5">
+      <!-- Featured blog post -->
+      <div class="p-4 p-md-5 mb-4 rounded text-body-emphasis bg-body-secondary shadow-sm">
+        <div class="col-lg-6 px-0">
+          <h1 class="display-4 fst-italic">
+            Evaluarea Națională
+          </h1>
+          <p class="lead my-3">
+            Timpul trece mai repede decât crezi, iar examenul se apropie pas cu pas. Cu cât începi mai devreme să înveți, cu atât vei fi mai relaxat și mai sigur pe tine. Fiecare exercițiu rezolvat azi îți aduce mai aproape reușita de mâine.
+          </p>
+          <p class="lead mb-0">
+            <a href="https://www.timeanddate.com/countdown/to?iso=20260622T09&p0=49&msg=Examen+Evaluarea+Nationala&ud=1&font=cursive" class="cta-link">Countdown Examen...</a>
+          </p>
+        </div>
+      </div>
+
+      <div class="row mb-2">
+        <div class="col-md-6 mb-4">
+          <div class="row g-0 border rounded overflow-hidden flex-md-row shadow-sm h-md-250 position-relative">
+            <div class="col p-4 d-flex flex-column position-static">
+              <strong class="d-inline-block mb-2 text-primary-emphasis">I</strong>
+              <h3 class="mb-0">Subiectul I</h3>
+              <p class="card-text mb-auto">
+                Aici găsești tot ce trebuie să știi pentru SI, atât pentru <a href="/materials/subject-1/part-a">partea A</a>, cât și pentru <a href="/materials/subject-1/part-b">partea B</a>.
+              </p>
+            </div>
+            <div class="col-auto d-none d-lg-block">
+              <img src="{{ url_for('static', path = 'assets/1-roman.png')}}" alt="Subject 1" width="200" height="250">
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+          <div class="row g-0 border rounded overflow-hidden flex-md-row shadow-sm h-md-250 position-relative">
+            <div class="col p-4 d-flex flex-column position-static">
+              <strong class="d-inline-block mb-2 text-success-emphasis">II</strong>
+              <h3 class="mb-0">Subiectul al II-lea</h3>
+              <p class="card-text mb-auto">
+                De la rezumat, scrisoare, notă de jurnal... până la text explicativ: floare la ureche!
+              </p>
+              <a href="/materials/subject-2" class="cta-link">Du-mă acolo!</a>
+            </div>
+            <div class="col-auto d-none d-lg-block">
+              <img src="{{ url_for('static', path='assets/2-roman.png') }}" alt="Subject 2" width="200" height="250">
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    
+{% endblock %}

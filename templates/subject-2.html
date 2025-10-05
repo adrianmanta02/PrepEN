@@ -1,0 +1,190 @@
+{% extends 'base.html' %}
+{% block title %}Tipuri de texte{% endblock %}
+{% block style %}
+    body {
+      background-color: #1c1c1e;
+      color: #f5f5f5;
+      font-family: 'Segoe UI', sans-serif;
+      min-height: 100vh;
+    }
+    
+    h1 {
+      font-weight: 700;
+      color: #ff6b6b;
+      margin-bottom: 3rem;
+    }
+    
+    .card {
+      background-color: #2c2c2e;
+      border: 1px solid #3a3a3c;
+      transition: all 0.3s ease;
+    }
+    
+    .card-hover:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+      border-color: #48484a;
+    }
+    
+    .feature-icon {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.2rem;
+      color: white;
+      margin: 0 auto 1.5rem auto;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+    }
+    
+    h3 {
+      color: #ff6b6b;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+    
+    .card-body p {
+      color: #d1d1d6;
+      line-height: 1.6;
+      font-size: 1rem;
+    }
+    
+    hr {
+      border-color: #3a3a3c;
+      margin: 3rem 0;
+      opacity: 0.5;
+    }
+    
+    .container {
+      max-width: 1200px;
+    }
+    
+    @media (max-width: 992px) {
+      h1 {
+        font-size: 2rem;
+        margin-bottom: 2rem;
+      }
+      
+      .feature-icon {
+        width: 70px;
+        height: 70px;
+        font-size: 1.8rem;
+      }
+      
+      h3 {
+        font-size: 1.5rem;
+      }
+    }
+{% endblock %}
+
+{% block content %}
+<main class="py-5">
+  <div class="container">
+    <h1 class="pb-4 text-center">Tipuri de texte</h1>
+    
+    <div class="row g-4 mb-5 row-cols-1 row-cols-lg-3">
+      <div class="col">
+        <div class="card h-100 text-center border-0 shadow-sm card-hover" onclick="window.location.href = '/materials/subject-2/rezumat'">
+          <div class="card-body">
+            <div class="feature-icon" style="background: linear-gradient(135deg, #a8dadc, #457b9d);">
+              <i class="bi bi-journal-text"></i>
+            </div>
+            <h3 class="fs-3">Rezumat</h3>
+            <p>Un rezumat păstrează doar ce e cu adevărat important, ca o fotografie rapidă a textului. Alegi ideile esențiale și lași deoparte detaliile care te pot distrage.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card h-100 text-center border-0 shadow-sm card-hover" onclick="window.location.href = '/materials/subject-2/scrisoare'">
+          <div class="card-body">
+            <div class="feature-icon" style="background: linear-gradient(135deg, #ffb703, #fb8500);">
+              <i class="bi bi-envelope"></i>
+            </div>
+            <h3 class="fs-3">Scrisoare</h3>
+            <p>Scrisoarea e ca un mesaj secret pe care îl trimiți cu stil – dacă o faci bine, lumea înțelege exact ce vrei să spui fără telepatie!</p>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card h-100 text-center border-0 shadow-sm card-hover" onclick="window.location.href = '/materials/subject-2/email'">
+          <div class="card-body">
+            <div class="feature-icon" style="background: linear-gradient(135deg, #ffccd5, #ff4d6d);">
+              <i class="bi bi-mailbox"></i>
+            </div>
+            <h3 class="fs-3">Email</h3>
+            <p>Emailul e super-eroul comunicării: rapid, eficient și gata să livreze mesajul tău exact acolo unde trebuie.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <hr>
+
+    <div class="row g-4 mb-5 row-cols-1 row-cols-lg-3">
+      <div class="col">
+        <div class="card h-100 text-center border-0 shadow-sm card-hover" onclick="window.location.href = '/materials/subject-2/jurnal'">
+          <div class="card-body">
+            <div class="feature-icon" style="background: linear-gradient(135deg, #caffbf, #2b9348);">
+              <i class="bi bi-journal"></i>
+            </div>
+            <h3 class="fs-3">Notă de jurnal</h3>
+            <p>Nota de jurnal e ca o mașină a timpului: îți păstrează gândurile și aventurile zilnice și te ajută să vezi cât de mult ai progresat.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card h-100 text-center border-0 shadow-sm card-hover" onclick="window.location.href = '/materials/subject-2/narativ'">
+          <div class="card-body">
+            <div class="feature-icon" style="background: linear-gradient(135deg, #ade8f4, #0096c7);">
+              <i class="bi bi-book-half"></i>
+            </div>
+            <h3 class="fs-3">Text narativ</h3>
+            <p>Textul narativ e ca o aventură pe hârtie: are personaje, întâmplări și suspans! Cu cât exersezi mai mult, cu atât vei deveni maestru în a spune povești captivante.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card h-100 text-center border-0 shadow-sm card-hover" onclick="window.location.href = '/materials/subject-2/descriptiv'">
+          <div class="card-body">
+            <div class="feature-icon" style="background: linear-gradient(135deg, #ffafcc, #ff61a6);">
+              <i class="bi bi-eye-fill"></i>
+            </div>
+            <h3 class="fs-3">Text descriptiv</h3>
+            <p>Textul descriptiv este lupa magică cu care vezi culorile, mirosurile și sunetele lucrurilor, chiar dacă sunt doar pe hârtie.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr>
+
+    <div class="row g-4 mb-5 row-cols-1 row-cols-lg-2">
+      <div class="col">
+        <div class="card h-100 text-center border-0 shadow-sm card-hover" onclick="window.location.href = '/materials/subject-2/argumentativ'">
+          <div class="card-body">
+            <div class="feature-icon" style="background: linear-gradient(135deg, #ffd6a5, #fb8500);">
+              <i class="bi bi-megaphone-fill"></i>
+            </div>
+            <h3 class="fs-3">Text argumentativ</h3>
+            <p>Textul argumentativ e super-eroul cuvintelor: îți dă puterea să convingi pe oricine că ideea ta e cea mai tare, cu dovezi și exemple amuzante!</p>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card h-100 text-center border-0 shadow-sm card-hover" onclick="window.location.href = '/materials/subject-2/explicativ'">
+          <div class="card-body">
+            <div class="feature-icon" style="background: linear-gradient(135deg, #bdb2ff, #7209b7);">
+              <i class="bi bi-lightbulb-fill"></i>
+            </div>
+            <h3 class="fs-3">Text explicativ</h3>
+            <p>Textul explicativ este magicianul care îți arată cum funcționează lucrurile pas cu pas, cu exemple amuzante și pași simpli. Misterele devin aventuri!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+{% endblock %}

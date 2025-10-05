@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+{% block title %}Gestionare Elevi{% endblock %}
+
+{% block style %}
+.users-table {
+  max-width: 900px;
+  margin: 30px auto;
+  background: #2c2c2e;
+  padding: 20px;
+  border-radius: 12px;
+  color: #f5f5f5;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+}
+.users-table h2 {
+  color: #ff6b6b;
+  margin-bottom: 12px;
+}
+.user-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid #393939;
+}
+.user-row:last-child { border-bottom: none; }
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.user-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  background: #3a3a3c;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: #fff;
+}
+.user-meta {
+  display: flex;
+  flex-direction: column;
+}
+.user-meta .username { font-weight: 600; color: #fff; }
+.user-meta .role { font-size: 0.9rem; color: #bdbdbd; }
+
+.action-buttons {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+/* buttons */
+.btn {
+  border: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.btn-approve {
+  background: #38d39f;
+  color: #042017;
+}
+.btn-approve:hover { filter: brightness(0.95); }
+
+.btn-revoke {
+  background: #ff6b6b;
+  color: white;
+}
+.btn-revoke:hover { filter: brightness(0.95); }
+
+.badge-pending {
+  background: #f6c84c;
+  color: #2b2b2b;
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+.badge-approved {
+  background: #38d39f;
+  color: #042017;
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+/* responsive */
+@media (max-width: 640px) {
+  .user-row { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .action-buttons { width: 100%; justify-content: flex-end; }
+}
+{% endblock %}
+
+{% block content %}
+<main class="users-table">
+  <h2>Elevi înscriși / în așteptare</h2>
+  <p style="color:#bdbdbd; margin-bottom: 12px;">
+    Aprobă sau șterge cererile elevilor aflați în așteptare. Poți oricând să limitezi accesul unui elev deja înscris.
+  </p>
+
+  {% if users|length == 0 %}
+    <div style="padding:20px; color:#bdbdbd;">Nu am găsit elevi / utilizatori.</div>
+  {% else %}
+    {% for u in users %}
+      <div class="user-row" id="user-row-{{ u.id }}">
+        <div class="user-info">
+          <div class="user-avatar">{{ u.username[0]|upper }}</div>
+          <div class="user-meta">
+            <div class="username">{{ u.username }}</div>
+            <div class="role">{{ u.role }} • id: {{ u.id }}</div>
+          </div>
+        </div>
+
+        <div style="display:flex; align-items:center; gap:12px;">
+          {% if not u.is_approved %}
+            <div class="badge-pending">pending</div>
+            <div class="action-buttons">
+              <button class="btn btn-approve" onclick="approveUser({{ u.id }}, this)">Approve</button>
+              <button class="btn btn-revoke" onclick="dismissUser({{ u.id }}, this)">Dismiss</button>
+            </div>
+          {% else %}
+            <div class="badge-approved">approved</div>
+            <div class="action-buttons">
+              {% if u.username != user.sub %}
+                <button class="btn btn-revoke" onclick="revokeApproval({{ u.id }}, this)">Revoke</button>
+              {% endif %}
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    {% endfor %}
+  {% endif %}
+</main>
+
+{% endblock %}

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Înregistrare</title>
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+      crossorigin="anonymous"
+    />
+
+    <style>
+      body {
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #121212;
+      }
+
+      .form-register {
+        max-width: 400px;
+        width: 100%;
+        padding: 2rem;
+        border-radius: 0.5rem;
+        background-color: #1e1e1e;
+        color: #fff;
+      }
+
+      .form-register .form-control {
+        background-color: #2a2a2a;
+        border: 1px solid #444;
+        color: #fff;
+      }
+
+      .form-register .form-control:focus {
+        background-color: #2a2a2a;
+        color: #fff;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="form-register text-center">
+      <form id="registerForm">
+        <img src="{{ url_for('static', path = 'assets/books.png') }}" alt="Books Image" width="100" height="100">
+        <h1 class="h3 mb-3 fw-normal">Creează un cont gratuit</h1>
+
+        <div class="form-floating mb-3">
+          <input type="text" class="form-control" id="firstName" name = "firstname" placeholder="Nume de familie" />
+          <label for="firstName">Nume</label>
+        </div>
+
+        <div class="form-floating mb-3">
+          <input type="text" class="form-control" id="lastName" name = "lastname" placeholder="Prenume" />
+          <label for="lastName">Prenume</label>
+        </div>
+
+        <div class="form-floating mb-3">
+            <input type="text" class = "form-control" id="userName" name="username" placeholder = "Nume Utilizator">
+            <label for="userName">Nume Utilizator</label>
+        </div>
+        <div id="usernameError" class="text-danger small"></div>
+        
+        <div class="form-floating mb-3">
+          <input type="email" class="form-control" id="email" name="email" placeholder="Email" />
+          <label for="email">Email</label>
+        </div>
+        <div id="emailError" class="text-danger small"></div>
+        
+        <div class="form-floating mb-3">
+          <input type="password" class="form-control" id="password" name="password" placeholder="Parolă" />
+          <label for="password">Parolă</label>
+        </div>
+
+        <div class="form-floating mb-3">
+          <input type="password" class="form-control" id="confirmPassword" name="password2" placeholder="Confirmare Parolă" />
+          <label for="confirmPassword">Confirmare Parolă</label>
+        </div>
+
+        <div class="form-floating mb-3">
+          <input type="text" class="form-control" id="grade" name="grade" placeholder="Clasa" />
+          <label for="grade">Clasa</label>
+        </div>
+
+        <button class="btn btn-primary w-100 py-2" type="submit" id = "register-btn">Register</button>
+
+        <p class="mt-2 mb-3 text-muted">Ai deja un cont? Loghează-te <a href="/auth/login-page">aici</a></p>
+        <p class="mt-4 mb-3 text-muted">&copy; 2025</p>
+      </form>
+    </main>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+      crossorigin="anonymous"
+    ></script>
+    <script src="{{ url_for('static', path = 'js/base.js') }}"></script>
+  </body>
+</html>

@@ -1,0 +1,295 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ 'Edit Material' if material else 'Upload Material' }}{% endblock %}
+{% block style %}
+    body { 
+      background-color: #1c1c1e; 
+      color: #f5f5f5;
+      font-family: 'Segoe UI', sans-serif;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    
+    .form-upload { 
+      max-width: 700px; 
+      margin: 50px auto; 
+      padding: 2.5rem; 
+      background-color: #2c2c2e; 
+      border-radius: 15px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    }
+    
+    h2 {
+      font-weight: 700;
+      color: #ff6b6b;
+      margin-bottom: 2rem;
+    }
+    
+    .form-label {
+      font-weight: 600;
+      color: #d1d1d6;
+      margin-bottom: 0.5rem;
+    }
+    
+    .form-control, .form-select {
+      background-color: #3a3a3c;
+      border: 1px solid #48484a;
+      color: #f5f5f5;
+      padding: 0.75rem;
+      border-radius: 8px;
+      transition: all 0.3s;
+    }
+    
+    .form-control:focus, .form-select:focus {
+      background-color: #48484a;
+      border-color: #4dabf7;
+      color: #f5f5f5;
+      box-shadow: 0 0 0 0.2rem rgba(77, 171, 247, 0.25);
+    }
+    
+    .form-control::placeholder {
+      color: #8e8e93;
+    }
+    
+    .btn-primary {
+      background-color: #4dabf7;
+      border: none;
+      padding: 0.875rem;
+      font-weight: 600;
+      font-size: 1.1rem;
+      border-radius: 8px;
+      transition: all 0.3s;
+    }
+    
+    .btn-primary:hover {
+      background-color: #339af0;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(77, 171, 247, 0.4);
+    }
+    
+    .preview, .thumb-preview { 
+      margin-top: 1rem; 
+      display: flex; 
+      flex-wrap: wrap; 
+      gap: 10px; 
+    }
+    
+    .preview img, .preview video, .thumb-preview img { 
+      max-width: 100px; 
+      max-height: 100px; 
+      border-radius: 8px; 
+      object-fit: cover;
+      border: 2px solid #48484a;
+    }
+    
+    .preview p { 
+      color: #8e8e93; 
+    }
+    
+    .thumb-preview { 
+      margin-bottom: 1rem; 
+    }
+    
+    .existing-files {
+      background-color: #3a3a3c;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-top: 0.75rem;
+    }
+    
+    .existing-files p {
+      color: #d1d1d6;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+    
+    .existing-files ul {
+      list-style: none;
+      padding-left: 0;
+      margin-bottom: 0;
+    }
+    
+    .existing-files li {
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #48484a;
+    }
+    
+    .existing-files li:last-child {
+      border-bottom: none;
+    }
+    
+    .existing-files a {
+      color: #4dabf7;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    
+    .existing-files a:hover {
+      color: #339af0;
+      text-decoration: underline;
+    }
+    
+    .mb-3 {
+      margin-bottom: 1.5rem !important;
+    }
+    
+    @media (max-width: 768px) {
+      .form-upload {
+        padding: 1.5rem;
+        margin: 20px auto;
+      }
+      
+      h2 {
+        font-size: 1.5rem;
+      }
+        .file-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        }
+
+        .file-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 8px;
+        }
+
+        .file-link {
+        flex-grow: 1;        
+        margin-right: 10px;    
+        color: #007bff;        
+        text-decoration: none;
+        word-break: break-all; 
+        }
+
+        .file-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }   
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .file-link {
+            flex-grow: 1;          
+            margin-right: 10px;    
+            color: #007bff;        
+            text-decoration: none;
+            word-break: break-all; 
+        }
+
+        .delete-button {
+            background-color: red;
+            border: none;
+            border-radius: 50%;
+            color: white;
+            width: 24px;
+            height: 24px;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+        }
+
+        .delete-button:hover {
+            background-color: darkred;
+        }
+    }
+{% endblock %}
+
+{% block content %}
+  <main class="form-upload">
+    <div class="container">
+        <button class="btn btn-secondary" onclick="window.location.href = sessionStorage.getItem('currentPath')">Înapoi la materiale.</button>
+    </div>
+    <h2 class="text-center">
+      {{ 'Edit Material' if material else 'Upload Material' }}
+    </h2>
+
+    <form id="uploadForm">
+      <div class="mb-3">
+        <label for="title" class="form-label">Titlu Material</label>
+        <input type="text" class="form-control" id="title"
+               value="{{ material.title if material else '' }}"
+               placeholder="Material title" name="title" required>
+      </div>
+
+      <div class="mb-3">
+        <label for="description" class="form-label">Descriere</label>
+        <textarea class="form-control" id="description" rows="3" name="description" placeholder="Add description..." required>{{ material.description if material else '' }}</textarea>
+      </div>
+
+      <div class="mb-3">
+        <label for="thumbnail" class="form-label">Thumbnail (imagine de prezentare)</label>
+        <input type="file" class="form-control" id="thumbnail" value="{{ material.thumbnail if material and material.thumbnail else ''}}" name="thumbnail" accept="image/*">
+        
+        <div class="thumb-preview mt-2">
+            {% if material and material.thumbnail %}
+                <img id="thumbnail-preview" src="{{ thumbnailUrl }}" alt="Current Thumbnail">
+            {% else %}
+                <img id="thumbnail-preview" src="{{ url_for('static', path = 'assets/default-thumb.png') }}" alt="Default Thumbnail">
+            {% endif %}
+        </div>
+        <div class="existing-files mt-2">
+            <p>Background-ul curent:</p>
+            {% if material and material.thumbnail %}
+                <p id="filename"><a href="{{ thumbnailUrl }}" target = "_blank">{{ material.thumbnail }}</a></p>
+            {% else %}
+                <p id="filename">Nicio imagine selectată / imaginea default.</p>
+        </div>
+        {% endif %}
+      </div>
+
+        <div class="mb-3">
+        <label for="files" class="form-label">Fișiere</label>
+        <input type="file" class="form-control" id="files" name="files" multiple>
+        
+        {% if material and material.files %}
+        <div class="existing-files">
+            <p>Fișiere existente:</p>
+            <ul class="file-list">
+                {% for file in material.files %}
+                <li class="file-item">
+                    <a class="file-link" href="{{ fileUrls[loop.index - 1] }}" target="_blank">
+                        {{ file }}
+                    </a>
+                    <button 
+                        class="delete-button" 
+                        type="button"
+                        data-filename="{{ file }}"
+                        onclick="removeFile(this.dataset.filename)">
+                        ×
+                    </button>
+                    <!-- Keep file in form for non-deleted items -->
+                    <input type="hidden" name="existing_files" value="{{ file }}" class="file-input-{{ loop.index }}">
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+        </div>
+
+      <div class="mb-3">
+        <label for="grade" class="form-label">Clasa țintă</label>
+        <select class="form-select" id="grade" name="grade" required>
+            <option value="">Selectează clasa</option>
+            <option value="5" {% if material and material.grade == 5 %}selected{% endif %}>5</option>
+            <option value="6" {% if material and material.grade == 6 %}selected{% endif %}>6</option>
+            <option value="7" {% if material and material.grade == 7 %}selected{% endif %}>7</option>
+            <option value="8" {% if material and material.grade == 8 %}selected{% endif %}>8</option>
+        </select>
+      </div>
+
+      <button type="submit" class="btn btn-primary w-100">
+        {{ 'Update' if material else 'Upload' }}
+      </button>
+    </form>
+  </main>
+
+{% endblock %}
