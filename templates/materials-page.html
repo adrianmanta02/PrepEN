@@ -79,7 +79,7 @@
                         {{ page_description_text }}
                     </p>
                     <p>
-                        {% if user and user.role == "teacher" %}
+                        {% if user and user.get('role') == "teacher" %}
                             <a href="/materials/add-material" class="btn btn-primary my-2">Adaugă mai multe materiale...</a>
                         {% endif %}    
                     </p>
@@ -99,10 +99,15 @@
                     {% for material in materials %}
                     <div class="col">
                         <div class="card shadow-sm">
-                            {% if not material.thumbnail %}
-                                <img src="{{ url_for('static', path='assets/default-thumb.png') }}" alt="Material thumbnail" class="card-img-top">
+                            {% if thumbnailUrls and thumbnailUrls[loop.index - 1] %}
+                                <img src="{{ thumbnailUrls[loop.index - 1] }}" 
+                                     alt="Material thumbnail" 
+                                     class="card-img-top"
+                                     onerror="this.src='/static/assets/default-thumb.png'">
                             {% else %}
-                                <img src="{{ thumbnailUrls[loop.index - 1] }}" alt="Material thumbnail" class="card-img-top">
+                                <img src="{{ url_for('static', path='assets/default-thumb.png') }}" 
+                                     alt="Material thumbnail" 
+                                     class="card-img-top">
                             {% endif %}
                             <div class="card-body">
                                 <p class="card-text">{{ material.title }}</p>
@@ -113,7 +118,7 @@
                                             onclick="window.location.href='/materials/view/{{ material.id }}'">
                                             Arată mai multe
                                         </button>
-                                        {% if user.role == "teacher" %}
+                                        {% if user and user.get('role') == "teacher" %}
                                         <button type="button" class="btn btn-sm btn-outline-secondary" onclick="window.location.href = '/materials/add-material?materialId={{material.id}}'">Modifică</button>
                                         {% endif %}
                                     </div>

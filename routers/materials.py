@@ -172,15 +172,17 @@ async def render_materials_page(
             if material.thumbnail:
                 try:
                     url = get_presigned_url(filename=material.thumbnail)
+                    
+                    if not url:  # get_presigned_url returned None
+                        url = "/static/assets/default-thumb.png"
                 except Exception as e:
                     print(f"Error generating URL for {material.thumbnail}: {e}")
-                    url = "/static/default-thumb.png"
+                    url = "/static/assets/default-thumb.png"
             else:
-                print(f"Material {material.id} has no thumbnail, using default")
-                url = "/static/default-thumb.png"
+                url = "/static/assets/default-thumb.png"
             thumbnailUrls.append(url)
 
-        # description cu fallback: titlu + text
+        # description with fallback 
         description_title, description_text = page_descriptions.get(
             part, ["Titlu lipsă", "Descriere lipsă"]
         )
